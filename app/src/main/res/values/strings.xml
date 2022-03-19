@@ -116,6 +116,7 @@
     <string name="your_name">Your Name</string>
     <string name="toolbar_title">Toolbar Title</string>
     <string name="splash_screen_icon">Splash Screen Icon</string>
+    <string name="search">Search</string>
 
 
 </resources>

@@ -31,13 +31,13 @@ class UserDetailActivity : AppCompatActivity() {
 
         supportActionBar?.title = ""
         toolbarDetailTitle.text = user.name
-        imgDetailPhoto.setImageResource(user.photo)
-        tvDetailUsername.text = user.username
-        tvDetailLocation.text = user.location
-        tvDetailRepository.text = user.repository
-        tvDetailCompany.text = user.company
-        tvDetailFollowers.text = user.followers
-        tvDetailFollowing.text = user.following
+//        imgDetailPhoto.setImageResource(user.photo)
+//        tvDetailUsername.text = user.username
+//        tvDetailLocation.text = user.location
+//        tvDetailRepository.text = user.repository
+//        tvDetailCompany.text = user.company
+//        tvDetailFollowers.text = user.followers
+//        tvDetailFollowing.text = user.following
 
     }
 }

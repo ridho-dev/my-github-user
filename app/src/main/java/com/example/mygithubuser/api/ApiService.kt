@@ -1,6 +1,5 @@
 package com.example.mygithubuser.api
 
-import com.example.mygithubuser.UserResponse
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -10,8 +9,8 @@ interface ApiService {
         @Query("q") query: String
     ): Call<UserResponse>
 
-    @GET("detail/{username}")
-    fun getUser(
+    @GET("users/{username}")
+    fun getDetailUser(
         @Path("username") username: String
-    ): Call<UserResponse>
+    ): Call<UserDetailResponse>
 }

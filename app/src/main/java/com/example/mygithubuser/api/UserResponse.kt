@@ -1,4 +1,4 @@
-package com.example.mygithubuser
+package com.example.mygithubuser.api
 
 import com.google.gson.annotations.SerializedName
 
@@ -73,3 +73,4 @@ data class ItemsItem(
 	@field:SerializedName("organizations_url")
 	val organizationsUrl: String
 )
+

@@ -13,6 +13,8 @@ import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mygithubuser.api.ApiConfig
+import com.example.mygithubuser.api.ItemsItem
+import com.example.mygithubuser.api.UserResponse
 import com.example.mygithubuser.databinding.ActivityMainBinding
 import retrofit2.Call
 import retrofit2.Callback
@@ -106,7 +108,8 @@ class MainActivity : AppCompatActivity() {
             val user = User(
                 data.avatarUrl,
                 data.login,
-                data.type
+                data.type,
+                data.url
             )
             listUser.add(user)
         }

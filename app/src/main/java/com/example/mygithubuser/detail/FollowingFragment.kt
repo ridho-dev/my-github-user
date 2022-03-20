@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.mygithubuser.main.ListUserAdapter
 import com.example.mygithubuser.main.User
@@ -22,6 +23,8 @@ class FollowingFragment : Fragment() {
     private var _binding : FragmentFollowingBinding? = null
     private val binding get() = _binding!!
     private lateinit var adapter: ListUserAdapter
+
+    private lateinit var followingViewModel: FollowingViewModel
 
     private val listUser = ArrayList<User>()
 
@@ -44,41 +47,26 @@ class FollowingFragment : Fragment() {
         _binding = FragmentFollowingBinding.inflate(inflater, container, false)
         adapter = ListUserAdapter(listUser)
         val username = arguments?.getString("USERNAME").toString()
+
+        followingViewModel = ViewModelProvider(this)[FollowingViewModel::class.java]
+        followingViewModel.isLoading.observe(viewLifecycleOwner) {
+            showLoading(it)
+        }
+
+        followingViewModel.getFollowing(username).observe(viewLifecycleOwner) {
+            setFollowing(it)
+        }
+
         binding.apply {
             rvFollowing.setHasFixedSize(true)
             rvFollowing.layoutManager = LinearLayoutManager(activity)
             rvFollowing.adapter = adapter
         }
 
-        getFollowing(username)
         return binding.root
     }
 
-    private fun getFollowing(username: String) {
-        showLoading(true)
-        val client = ApiConfig.getApiService().getFollowingUser(username)
-        client.enqueue(object : Callback<List<FollowingResponseItem>> {
-            override fun onResponse(
-                call: Call<List<FollowingResponseItem>>,
-                response: Response<List<FollowingResponseItem>>
-            ) {
-                showLoading(false)
-                if (response.isSuccessful) {
-                    val responseBody = response.body()
-                    if (responseBody != null){
-                        setFollowing(responseBody)
-                    }
-                } else {
-                    Log.e(TAG, "onFailure: ${response.message()}")
-                }
-            }
 
-            override fun onFailure(call: Call<List<FollowingResponseItem>>, t: Throwable) {
-                showLoading(false)
-                Log.e(TAG, "onFailure: ${t.message}")
-            }
-        })
-    }
 
     private fun setFollowing(following: List<FollowingResponseItem>) {
         listUser.clear()

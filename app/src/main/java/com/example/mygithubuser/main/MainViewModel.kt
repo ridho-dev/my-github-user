@@ -44,7 +44,6 @@ class MainViewModel: ViewModel() {
                 Log.e(TAG, "onFailure: ${t.message}")
             }
         })
-
         return _users
     }
 }

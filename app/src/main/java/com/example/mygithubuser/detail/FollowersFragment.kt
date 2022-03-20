@@ -2,7 +2,6 @@ package com.example.mygithubuser.detail
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -11,25 +10,20 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.mygithubuser.main.ListUserAdapter
 import com.example.mygithubuser.main.User
-import com.example.mygithubuser.api.ApiConfig
 import com.example.mygithubuser.api.FollowersResponseItem
 import com.example.mygithubuser.databinding.FragmentFollowersBinding
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class FollowersFragment : Fragment() {
 
     private var _binding : FragmentFollowersBinding? = null
     private val binding get() = _binding!!
-    private lateinit var adapter: ListUserAdapter
 
+    private lateinit var adapter: ListUserAdapter
     private lateinit var followersViewModel: FollowersViewModel
 
     private val listUser = ArrayList<User>()
 
     companion object {
-        private const val TAG = "FollowersFragment"
         fun getInstance(username : String):Fragment{
             return FollowersFragment().apply {
                 arguments = Bundle().apply{
@@ -46,13 +40,15 @@ class FollowersFragment : Fragment() {
         // Inflate the layout for this fragment
         _binding = FragmentFollowersBinding.inflate(inflater, container, false)
         adapter = ListUserAdapter(listUser)
+
         val username = arguments?.getString("USERNAME").toString()
+
+        showFollowersNotFound(false)
 
         followersViewModel = ViewModelProvider(this)[FollowersViewModel::class.java]
         followersViewModel.isLoading.observe(viewLifecycleOwner) {
             showLoading(it)
         }
-
         followersViewModel.getFollowers(username).observe(viewLifecycleOwner) {
             setFollowers(it)
         }
@@ -68,14 +64,18 @@ class FollowersFragment : Fragment() {
 
     private fun setFollowers(followers: List<FollowersResponseItem>) {
         listUser.clear()
-        for (data in followers) {
-            val user = User(
-                data.avatarUrl,
-                data.login,
-                data.type,
-                data.url
-            )
-            listUser.add(user)
+        if (followers.isEmpty()) {
+            showFollowersNotFound(true)
+        } else {
+            showFollowersNotFound(false)
+            for (data in followers) {
+                val user = User(
+                    data.avatarUrl,
+                    data.login,
+                    data.type,
+                )
+                listUser.add(user)
+            }
         }
 
         val rvFollowers = binding.rvFollowers
@@ -101,6 +101,20 @@ class FollowersFragment : Fragment() {
             binding.followersProgressBar.visibility = View.VISIBLE
         } else {
             binding.followersProgressBar.visibility = View.INVISIBLE
+        }
+    }
+
+    private fun showFollowersNotFound(isNotFound: Boolean) {
+        if (isNotFound) {
+            binding.apply {
+                ivFollowersNotFound.visibility = View.VISIBLE
+                tvFollowersNotFound.visibility = View.VISIBLE
+            }
+        } else {
+            binding.apply {
+                ivFollowersNotFound.visibility = View.INVISIBLE
+                tvFollowersNotFound.visibility = View.INVISIBLE
+            }
         }
     }
 

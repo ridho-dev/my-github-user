@@ -14,7 +14,6 @@ class ListUserAdapter(private val listUser: ArrayList<User>) :
 
     private lateinit var onItemClickCallback: OnItemClickCallBack
 
-
     fun setOnItemClickCallBack(onItemClickCallBack: OnItemClickCallBack) {
         this.onItemClickCallback = onItemClickCallBack
     }
@@ -43,10 +42,8 @@ class ListUserAdapter(private val listUser: ArrayList<User>) :
             .into(holder.imgPhoto)
         holder.tvName.text = name
         holder.tvUserType.text = type
-
         holder.itemView.setOnClickListener { onItemClickCallback.onItemClicked(listUser[holder.adapterPosition]) }
     }
 
     override fun getItemCount(): Int = listUser.size
-
 }

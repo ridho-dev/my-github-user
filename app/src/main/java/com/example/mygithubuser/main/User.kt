@@ -8,11 +8,4 @@ data class User(
     var photo: String,
     var name: String,
     var userType: String,
-    var userUrl: String,
-//    var username: String,
-//    var location: String,
-//    var repository: String,
-//    var company: String,
-//    var followers: String,
-//    var following: String,
 ) : Parcelable

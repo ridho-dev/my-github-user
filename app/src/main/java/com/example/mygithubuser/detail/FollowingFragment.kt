@@ -2,7 +2,6 @@ package com.example.mygithubuser.detail
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -11,29 +10,24 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.mygithubuser.main.ListUserAdapter
 import com.example.mygithubuser.main.User
-import com.example.mygithubuser.api.ApiConfig
 import com.example.mygithubuser.api.FollowingResponseItem
 import com.example.mygithubuser.databinding.FragmentFollowingBinding
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class FollowingFragment : Fragment() {
 
-    private var _binding : FragmentFollowingBinding? = null
+    private var _binding: FragmentFollowingBinding? = null
     private val binding get() = _binding!!
-    private lateinit var adapter: ListUserAdapter
 
+    private lateinit var adapter: ListUserAdapter
     private lateinit var followingViewModel: FollowingViewModel
 
     private val listUser = ArrayList<User>()
 
     companion object {
-        private const val TAG = "FollowingFragment"
-        fun getInstance(username : String):Fragment{
+        fun getInstance(username: String): Fragment {
             return FollowingFragment().apply {
-                arguments = Bundle().apply{
-                    putString("USERNAME",username)
+                arguments = Bundle().apply {
+                    putString("USERNAME", username)
                 }
             }
         }
@@ -42,11 +36,14 @@ class FollowingFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         _binding = FragmentFollowingBinding.inflate(inflater, container, false)
         adapter = ListUserAdapter(listUser)
+
         val username = arguments?.getString("USERNAME").toString()
+
+        showFollowersNotFound(false)
 
         followingViewModel = ViewModelProvider(this)[FollowingViewModel::class.java]
         followingViewModel.isLoading.observe(viewLifecycleOwner) {
@@ -66,18 +63,20 @@ class FollowingFragment : Fragment() {
         return binding.root
     }
 
-
-
     private fun setFollowing(following: List<FollowingResponseItem>) {
         listUser.clear()
-        for (data in following) {
-            val user = User(
-                data.avatarUrl,
-                data.login,
-                data.type,
-                data.url
-            )
-            listUser.add(user)
+        if (following.isEmpty()) {
+            showFollowersNotFound(true)
+        } else {
+            showFollowersNotFound(false)
+            for (data in following) {
+                val user = User(
+                    data.avatarUrl,
+                    data.login,
+                    data.type,
+                )
+                listUser.add(user)
+            }
         }
 
         val rvFollowers = binding.rvFollowing
@@ -106,9 +105,22 @@ class FollowingFragment : Fragment() {
         }
     }
 
+    private fun showFollowersNotFound(isNotFound: Boolean) {
+        if (isNotFound) {
+            binding.apply {
+                ivFollowingNotFound.visibility = View.VISIBLE
+                tvFollowingNotFound.visibility = View.VISIBLE
+            }
+        } else {
+            binding.apply {
+                ivFollowingNotFound.visibility = View.INVISIBLE
+                tvFollowingNotFound.visibility = View.INVISIBLE
+            }
+        }
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
-
 }

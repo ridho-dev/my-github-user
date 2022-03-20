@@ -6,7 +6,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.mygithubuser.api.ApiConfig
 import com.example.mygithubuser.api.FollowersResponseItem
-import com.example.mygithubuser.api.ItemsItem
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -46,7 +45,6 @@ class FollowersViewModel: ViewModel() {
                 _isLoading.value = false
                 Log.e(TAG, "onFailure: ${t.message}")
             }
-
         })
         return _users
     }

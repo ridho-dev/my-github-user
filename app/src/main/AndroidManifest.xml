@@ -13,14 +13,14 @@
         android:theme="@style/Theme.MyGitHubUser.NoActionBar">
 
         <activity
-            android:name=".UserDetailActivity"
+            android:name=".detail.UserDetailActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".main.MainActivity"
             android:exported="false" />
 
         <activity
-            android:name=".SplashScreenActivity"
+            android:name=".main.SplashScreenActivity"
             android:exported="true">
 
             <intent-filter>

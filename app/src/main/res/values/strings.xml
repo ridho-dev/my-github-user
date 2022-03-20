@@ -117,6 +117,10 @@
     <string name="toolbar_title">Toolbar Title</string>
     <string name="splash_screen_icon">Splash Screen Icon</string>
     <string name="search">Search</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="tab_text_1">Followers</string>
+    <string name="tab_text_2">Following</string>
 
 
 </resources>

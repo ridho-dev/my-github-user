@@ -1,4 +1,4 @@
-package com.example.mygithubuser
+package com.example.mygithubuser.main
 
 import android.app.SearchManager
 import android.content.Context
@@ -7,15 +7,18 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
-import android.widget.Toast
+import android.view.View
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.mygithubuser.R
 import com.example.mygithubuser.api.ApiConfig
 import com.example.mygithubuser.api.ItemsItem
 import com.example.mygithubuser.api.UserResponse
 import com.example.mygithubuser.databinding.ActivityMainBinding
+import com.example.mygithubuser.detail.UserDetailActivity
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -25,6 +28,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var rvUsers: RecyclerView
     private val listUser = ArrayList<User>()
+    private lateinit var mainViewModel: MainViewModel
 
     companion object {
         private const val TAG = "MainActivity"
@@ -40,6 +44,12 @@ class MainActivity : AppCompatActivity() {
 
         rvUsers = findViewById(R.id.rv_users)
         rvUsers.setHasFixedSize(true)
+
+        mainViewModel = ViewModelProvider(this)[MainViewModel::class.java]
+
+        mainViewModel.isLoading.observe(this) {
+            showLoading(it)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -55,7 +65,9 @@ class MainActivity : AppCompatActivity() {
             android.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 if (query != null) {
-                    findUser(query)
+                    mainViewModel.findUser(query).observe(this@MainActivity) {
+                        setUser(it)
+                    }
                 }
                 searchView.clearFocus()
                 return true
@@ -63,43 +75,14 @@ class MainActivity : AppCompatActivity() {
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (newText != null) {
-                    findUser(newText)
+                    mainViewModel.findUser(newText).observe(this@MainActivity) {
+                        setUser(it)
+                    }
                 }
                 return true
             }
-
         })
-
-        searchView.setOnCloseListener(object : SearchView.OnCloseListener,
-            android.widget.SearchView.OnCloseListener {
-            override fun onClose(): Boolean {
-                Toast.makeText(this@MainActivity, "closed", Toast.LENGTH_SHORT).show()
-                return false
-            }
-        })
-
         return true
-    }
-
-    private fun findUser(query: String) {
-        val client = ApiConfig.getApiService().getSearchUsers(query)
-        client.enqueue(object : Callback<UserResponse> {
-            override fun onResponse(call: Call<UserResponse>, response: Response<UserResponse>) {
-                if (response.isSuccessful) {
-                    val responseBody = response.body()
-                    if (responseBody != null){
-                        setUser(responseBody.items)
-                    }
-                } else {
-                    Log.e(TAG, "onFailure: ${response.message()}")
-                }
-            }
-
-            override fun onFailure(call: Call<UserResponse>, t: Throwable) {
-                Log.e(TAG, "onFailure: ${t.message}")
-            }
-
-        })
     }
 
     private fun setUser(userData: List<ItemsItem>){
@@ -129,6 +112,14 @@ class MainActivity : AppCompatActivity() {
         val moveWithDataIntent = Intent(this@MainActivity, UserDetailActivity::class.java)
         moveWithDataIntent.putExtra(UserDetailActivity.EXTRA_USER, user)
         startActivity(moveWithDataIntent)
+    }
+
+    private fun showLoading(isLoading: Boolean) {
+        if (isLoading) {
+            binding.mainProgressBar.visibility = View.VISIBLE
+        } else {
+            binding.mainProgressBar.visibility = View.INVISIBLE
+        }
     }
 
 

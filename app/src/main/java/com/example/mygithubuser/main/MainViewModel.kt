@@ -1,6 +1,7 @@
 package com.example.mygithubuser.main
 
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -18,10 +19,6 @@ class MainViewModel: ViewModel() {
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading : LiveData<Boolean> = _isLoading
-
-    companion object {
-        private const val TAG = "MainViewModel"
-    }
 
     fun findUser(query: String): LiveData<List<ItemsItem>> {
         _isLoading.value = true
@@ -45,5 +42,9 @@ class MainViewModel: ViewModel() {
             }
         })
         return _users
+    }
+
+    companion object {
+        private const val TAG = "MainViewModel"
     }
 }

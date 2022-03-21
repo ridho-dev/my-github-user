@@ -20,16 +20,6 @@ class UserDetailActivity : AppCompatActivity() {
 
     private lateinit var userDetailViewModel: UserDetailViewModel
 
-    companion object {
-        const val EXTRA_USER = "extra_user"
-        const val TAG = "UserDetailActivity"
-        @StringRes
-        private val TAB_TITLES = intArrayOf(
-            R.string.tab_text_1,
-            R.string.tab_text_2
-        )
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityUserDetailBinding.inflate(layoutInflater)
@@ -81,5 +71,15 @@ class UserDetailActivity : AppCompatActivity() {
         } else {
             binding.userDetailProgressBar.visibility = View.INVISIBLE
         }
+    }
+
+    companion object {
+        const val EXTRA_USER = "extra_user"
+        const val TAG = "UserDetailActivity"
+        @StringRes
+        private val TAB_TITLES = intArrayOf(
+            R.string.tab_text_1,
+            R.string.tab_text_2
+        )
     }
 }

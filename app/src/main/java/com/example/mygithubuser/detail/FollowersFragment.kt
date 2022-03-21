@@ -23,16 +23,6 @@ class FollowersFragment : Fragment() {
 
     private val listUser = ArrayList<User>()
 
-    companion object {
-        fun getInstance(username : String):Fragment{
-            return FollowersFragment().apply {
-                arguments = Bundle().apply{
-                    putString("USERNAME",username)
-                }
-            }
-        }
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -95,11 +85,8 @@ class FollowersFragment : Fragment() {
     }
 
     private fun showLoading(isLoading: Boolean) {
-        if (isLoading) {
-            binding.followersProgressBar.visibility = View.VISIBLE
-        } else {
-            binding.followersProgressBar.visibility = View.INVISIBLE
-        }
+        binding.followersProgressBar.visibility =
+            if (isLoading) View.VISIBLE else View.INVISIBLE
     }
 
     private fun showFollowersNotFound(isNotFound: Boolean) {
@@ -119,6 +106,16 @@ class FollowersFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    companion object {
+        fun getInstance(username : String):Fragment{
+            return FollowersFragment().apply {
+                arguments = Bundle().apply{
+                    putString("USERNAME",username)
+                }
+            }
+        }
     }
 
 }

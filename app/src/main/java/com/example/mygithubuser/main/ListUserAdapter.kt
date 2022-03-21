@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.mygithubuser.R
+import com.example.mygithubuser.databinding.ItemRowUserBinding
 
 class ListUserAdapter(private val listUser: ArrayList<User>) :
     RecyclerView.Adapter<ListUserAdapter.ListViewHolder>() {
@@ -22,26 +23,23 @@ class ListUserAdapter(private val listUser: ArrayList<User>) :
         fun onItemClicked(data: User)
     }
 
-    class ListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var imgPhoto: ImageView = itemView.findViewById(R.id.img_item_photo)
-        var tvName: TextView = itemView.findViewById(R.id.tv_item_name)
-        var tvUserType: TextView = itemView.findViewById(R.id.tv_item_user_type)
-    }
+    class ListViewHolder(var binding: ItemRowUserBinding) : RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
-        val view: View =
-            LayoutInflater.from(parent.context).inflate(R.layout.item_row_user, parent, false)
-        return ListViewHolder(view)
+        val binding = ItemRowUserBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ListViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
         val (photo, name, type) = listUser[position]
-        Glide.with(holder.itemView.context)
-            .load(photo)
-            .circleCrop()
-            .into(holder.imgPhoto)
-        holder.tvName.text = name
-        holder.tvUserType.text = type
+        holder.binding.apply {
+            Glide.with(holder.itemView.context)
+                .load(photo)
+                .circleCrop()
+                .into(imgItemPhoto)
+            tvItemName.text = name
+            tvItemUserType.text = type
+        }
         holder.itemView.setOnClickListener { onItemClickCallback.onItemClicked(listUser[holder.adapterPosition]) }
     }
 

@@ -2,7 +2,6 @@ package com.example.mygithubuser.detail
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.annotation.StringRes
 import androidx.appcompat.widget.Toolbar
@@ -11,14 +10,10 @@ import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.example.mygithubuser.R
 import com.example.mygithubuser.main.User
-import com.example.mygithubuser.api.ApiConfig
 import com.example.mygithubuser.api.UserDetailResponse
 import com.example.mygithubuser.databinding.ActivityUserDetailBinding
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class UserDetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityUserDetailBinding

@@ -79,10 +79,8 @@ class FollowingFragment : Fragment() {
             }
         }
 
-        val rvFollowers = binding.rvFollowing
-        rvFollowers.layoutManager = LinearLayoutManager(activity)
         val listUserAdapter = ListUserAdapter(listUser)
-        rvFollowers.adapter = listUserAdapter
+        binding.rvFollowing.adapter = listUserAdapter
 
         listUserAdapter.setOnItemClickCallBack(object : ListUserAdapter.OnItemClickCallBack {
             override fun onItemClicked(data: User) {

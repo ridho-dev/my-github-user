@@ -22,6 +22,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var rvUsers: RecyclerView
     private lateinit var mainViewModel: MainViewModel
+    private lateinit var adapter: ListUserAdapter
 
     private val listUser = ArrayList<User>()
 
@@ -30,17 +31,22 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        adapter = ListUserAdapter(listUser)
+
         val toolbar: Toolbar = findViewById(R.id.tb_main)
         setSupportActionBar(toolbar)
-
-        rvUsers = findViewById(R.id.rv_users)
-        rvUsers.setHasFixedSize(true)
 
         showUserNotFound(false)
 
         mainViewModel = ViewModelProvider(this)[MainViewModel::class.java]
         mainViewModel.isLoading.observe(this) {
             showLoading(it)
+        }
+
+        binding.apply {
+            rvUsers.setHasFixedSize(true)
+            rvUsers.layoutManager = LinearLayoutManager(this@MainActivity)
+            rvUsers.adapter = adapter
         }
     }
 
@@ -93,7 +99,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        rvUsers.layoutManager = LinearLayoutManager(this)
         val listUserAdapter = ListUserAdapter(listUser)
         binding.rvUsers.adapter = listUserAdapter
 

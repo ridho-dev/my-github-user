@@ -3,6 +3,7 @@ package com.example.mygithubuser.detail
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.annotation.StringRes
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProvider
@@ -50,6 +51,9 @@ class UserDetailActivity : AppCompatActivity() {
         userDetailViewModel.getUserDetail(user.name).observe(this) {
             setUserDetail(it)
         }
+        userDetailViewModel.isLoading.observe(this) {
+            showLoading(it)
+        }
 
         val sectionsPagerAdapter = SectionsPagerAdapter(this, user.name)
         val viewPager: ViewPager2 = binding.viewPager
@@ -73,6 +77,14 @@ class UserDetailActivity : AppCompatActivity() {
             tvDetailRepositoryCount.text = userData?.publicRepos.toString()
             tvDetailCompany.text = userData?.company ?: "-"
             tvDetailLocation.text = userData?.location ?: "-"
+        }
+    }
+
+    private fun showLoading(isLoading: Boolean) {
+        if (isLoading) {
+            binding.userDetailProgressBar.visibility = View.VISIBLE
+        } else {
+            binding.userDetailProgressBar.visibility = View.INVISIBLE
         }
     }
 }
